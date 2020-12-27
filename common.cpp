@@ -1383,11 +1383,29 @@ static void mrboom_hotpatch()
    if (init) {
       return;
    }
-   init = true;
+   //init = true;
 
-   if (isXmasPeriod()) {
-      memcpy(m.pal, Menu_christmas, 256*3);
-      memcpy(m.heap + 0x3e800, Menu_christmas+256*3, 320*200);
+   static int current_menu = -100;
+   static uint8_t normal_menu_raw[320*200];
+   static uint8_t normal_menu_pal[256*3];
+
+   if (current_menu == -100) {
+      memcpy(&normal_menu_raw, m.heap + 0x3e800, 320*200);
+      memcpy(&normal_menu_pal, m.pal, 256*3);
+   }
+
+   if ((current_menu == -100) ||
+       ((current_menu != getMenuTheme()) && (level() != -1))) {
+      current_menu = getMenuTheme();
+
+      if (isXmasPeriod()) {
+         memcpy(m.heap + 0x3e800, Menu_christmas+256*3, 320*200);
+         memcpy(m.pal, Menu_christmas, 256*3);
+      }
+      else {
+         memcpy(m.heap + 0x3e800, normal_menu_raw, 320*200);
+         memcpy(m.pal, normal_menu_pal, 256*3);
+      }
    }
 }
 

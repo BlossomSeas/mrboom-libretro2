@@ -596,7 +596,9 @@ bool isXmasPeriod()
    {
       return res;
    }
-   init = true;
+   //init = true;
+   if (getMenuTheme() == 1) return false;
+   if (getMenuTheme() == 2) return true;
 
    time_t rawtime;
    struct tm *timeinfo;
@@ -616,3 +618,14 @@ bool isXmasPeriod()
    }
    return res;
 }
+
+static int menu_theme;
+void setMenuTheme(int theme)
+{
+   menu_theme = theme;
+} // setMenuTheme
+
+int getMenuTheme()
+{
+   return menu_theme;
+} // getMenuTheme

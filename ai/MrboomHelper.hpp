@@ -158,6 +158,9 @@ int getInputForPlayer(unsigned int player);
 
 bool isXmasPeriod();
 
+void setMenuTheme(int theme);
+int getMenuTheme();
+   
 #ifdef __cplusplus
 }
 #endif
