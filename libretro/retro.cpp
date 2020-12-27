@@ -293,7 +293,7 @@ void retro_reset(void)
 
 static void set_game_options(void)
 {
-   if (inTheMenu() == true)
+   if (isGameActive() == false)
    {
       setTeamMode(team_mode);
       setNoMonsterMode(noMonster_mode);
