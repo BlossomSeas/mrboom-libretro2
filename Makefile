@@ -573,6 +573,7 @@ else
 endif
 
 CFLAGS += -DMRBOOM -DHAVE_IBXM -D_FORTIFY_SOURCE=0 -DPLATFORM=\"$(platform)\" -DGIT_VERSION=\"$(GIT_VERSION)\"
+CFLAGS += -DNO_NETWORK
 
 SDL2LIBS :=  -lSDL2  -lSDL2_mixer -lminizip
 
