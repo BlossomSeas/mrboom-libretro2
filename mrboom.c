@@ -11451,7 +11451,7 @@ R(CMP(8,*((db *) realAddress(offsetof(struct Mem,ordre2), ds)),8,(db)37));
 R(JNE(iertrtrterteert));
 R(XOR(32,READDD(ebx),32,(dd)READDD(ebx)));
 ierterertertrtyetyutyutyuutytyutyu:
-R(CMP(32,read_dd(realAddress((offsetof(struct Mem,victoires)+READDD(ebx)), ds)),32,(dd)5));
+R(CMP(32,read_dd(realAddress((offsetof(struct Mem,victoires)+READDD(ebx)), ds)),32,(dd)getRoundsLimit()));
 R(JNE(iertterteteertzerzerzerzerrteretr));
 R(MOV(8,*((db *) realAddress(offsetof(struct Mem,ordre2), ds)),8,(db)86));
 R(JMP(victoire_sup));

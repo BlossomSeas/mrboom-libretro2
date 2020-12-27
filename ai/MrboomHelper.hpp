@@ -158,6 +158,9 @@ int getInputForPlayer(unsigned int player);
 
 bool isXmasPeriod();
 
+void setRoundsLimit(int limit);
+int getRoundsLimit();
+
 #ifdef __cplusplus
 }
 #endif

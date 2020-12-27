@@ -3604,6 +3604,8 @@ void program();
 #define sizeOfliste_bombe_array  4
 
 void fixBigEndian(void *data);
+
+int getRoundsLimit();
 #ifdef __cplusplus
 }
 #endif

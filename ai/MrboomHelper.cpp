@@ -616,3 +616,14 @@ bool isXmasPeriod()
    }
    return res;
 }
+
+static int roundsLimit = 5;
+void setRoundsLimit(int limit)
+{
+   roundsLimit = limit;
+} // setRoundsLimit
+
+int getRoundsLimit()
+{
+   return roundsLimit;
+} // getRoundsLimit

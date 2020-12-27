@@ -47,6 +47,7 @@ static const struct retro_variable var_mrboom_levelselect = { "mrboom-levelselec
 static const struct retro_variable var_mrboom_aspect      = { "mrboom-aspect", "Aspect ratio; Native|4:3|16:9" };
 static const struct retro_variable var_mrboom_musicvolume = { "mrboom-musicvolume", "Music volume; 100|0|5|10|15|20|25|30|35|40|45|50|55|60|65|70|75|80|85|90|95" };
 static const struct retro_variable var_mrboom_sfxvolume   = { "mrboom-sfxvolume", "Sfx volume; 50|55|60|65|70|75|80|85|90|95|100|0|5|10|15|20|25|30|35|40|45" };
+static const struct retro_variable var_mrboom_roundslimit = { "mrboom-roundslimit", "Rounds limit; 5|1|2|3|4" };
 
 static const struct retro_variable var_empty = { NULL, NULL };
 
@@ -111,16 +112,21 @@ void retro_init(void)
    vars_systems.push_back(&var_mrboom_teammode);
    vars_systems.push_back(&var_mrboom_nomonster);
    vars_systems.push_back(&var_mrboom_levelselect);
+   vars_systems.push_back(&var_mrboom_roundslimit);
    vars_systems.push_back(&var_mrboom_aspect);
    vars_systems.push_back(&var_mrboom_musicvolume);
    vars_systems.push_back(&var_mrboom_sfxvolume);
 
 #define NB_VARS_SYSTEMS    6
    assert(vars_systems.size() == NB_VARS_SYSTEMS);
+
+   int num_options = NB_VARS_SYSTEMS;
+   num_options++; // rounds limit
+
    // Add the System core options
    int idx_var = 0;
-   struct retro_variable vars[NB_VARS_SYSTEMS + 1];      // + 1 for the empty ending retro_variable
-   for (i = 0; i < NB_VARS_SYSTEMS; i++, idx_var++)
+   struct retro_variable vars[50 + 1];      // + 1 for the empty ending retro_variable
+   for (i = 0; i < num_options; i++, idx_var++)
    {
       vars[idx_var] = *vars_systems[i];
       log_cb(RETRO_LOG_INFO, "retro_variable (SYSTEM)    { '%s', '%s' }\n", vars[idx_var].key, vars[idx_var].value);
@@ -558,6 +564,19 @@ static void check_variables(void)
          libretro_sfx_volume = val;
       }
    }
+   var.key = var_mrboom_roundslimit.key;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var))
+   {
+      char *err;
+      long val;
+
+      errno = 0;
+      val = strtol (var.value, &err, 10);
+      if (var.value != err && errno == 0)
+      {
+         setRoundsLimit(val);
+      }
+   } // var_mrboom_roundslimit
 }
 
 void retro_run(void)
