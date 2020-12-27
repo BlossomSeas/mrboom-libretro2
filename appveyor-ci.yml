@@ -1,0 +1,85 @@
+#
+# Builds project files
+#
+
+
+clone_depth: 50
+
+
+
+environment:
+
+  GIT_SCRIPT: SiennaSilver
+
+
+
+  COMPILER: gcc-win32-posix
+
+  PROJECT: mrboom
+
+  SOLUTION: makefile
+
+  CONFIGURATION: libretro
+
+
+
+  matrix:
+    - Platform: windows_desktop_x86
+    # - Platform: windows_desktop_x64
+
+
+
+artifacts:
+  - path: '**\*libretro.dll'
+
+
+
+
+build_script:
+
+  - ps: |
+
+      if (${env:GIT_SCRIPT} -Eq $Null) {
+        $env:GIT_SCRIPT = $env:APPVEYOR_REPO_COMMIT_AUTHOR
+      }
+
+
+
+      ##################################
+
+
+
+      try {
+        iex ((New-Object System.Net.WebClient).DownloadString("https://github.com/${env:GIT_SCRIPT}/appveyor-ci/raw/main/script/script.ps1"))
+
+        iex ((New-Object System.Net.WebClient).DownloadString("${env:GIT_SCRIPT}/build/build.ps1"))
+      }
+
+      catch {
+        throw "$_"
+      }
+
+
+
+      ##################################
+
+
+
+  - ps: |
+      git_merge gcc_core2
+      git_resolve disable_stats Makefile both
+
+      git_merge pause_button
+      git_merge change_rules
+      git_merge stage_music
+      git_merge rounds_limit
+      git_merge random_monsters
+      git_merge sample_rate
+
+      git_resolve menu_theme libretro/retro.cpp both
+      git_modify ai/MrboomHelper.cpp both
+      git_modify ai/MrboomHelper.hpp both
+
+
+  - cmd: |
+      cmd.exe /c %Build%
