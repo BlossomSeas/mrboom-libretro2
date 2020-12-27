@@ -1156,9 +1156,23 @@ void mrboom_update_input(int keyid, int playerNumber, int state, bool isIA)
    }
 
 #ifdef __LIBRETRO__
-   if (startPressed && selectPressed)
+   static bool startHeld = false;
+
+   if (startPressed)
    {
-      pressESC();
+      if (selectPressed)
+      {
+         pressESC();
+      }
+      else if (!startHeld)
+      {
+         pauseGameButton();
+         startHeld = true;
+      }
+   }
+   else
+   {
+      startHeld = false;
    }
 #endif
 }
