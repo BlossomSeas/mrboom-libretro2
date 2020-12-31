@@ -1,0 +1,107 @@
+#
+# Copies current branch to a remote target branch
+#
+
+
+clone_depth: 50
+
+
+
+environment:
+  PROJECT: mrboom-libretro
+
+  SOURCE_NAME: SiennaSilver
+
+
+  GIT_LOGIN:
+    secure: amMZ6df8TLOtvifbKvi06g==
+
+
+
+  REMOTE_NAME: SimpleTease
+  REMOTE_AUTHOR: SimpleTease
+  REMOTE_EMAIL: 31772993+SimpleTease@users.noreply.github.com
+
+  REMOTE_TARGET: fix
+
+
+  REMOTE_LOGIN:
+    secure: r8DdqZv1lN3AS6H+mpx8lA==
+
+
+
+
+init:
+
+  - cmd: |
+      git init
+
+      git config --global credential.helper store
+      powershell Add-Content "$HOME\.git-credentials" "https://%APPVEYOR_REPO_COMMIT_AUTHOR%:%SOURCE_LOGIN%@github.com`n"
+
+      git config --global user.name "%APPVEYOR_REPO_COMMIT_AUTHOR%"
+      git config --global user.email "%APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%"
+
+      git config --global advice.detachedHead false
+
+
+
+
+  - cmd: |
+      git remote add origin "https://github.com/%SOURCE_NAME%/%PROJECT%.git"
+      git remote add remote "https://github.com/%REMOTE_NAME%/%PROJECT%.git"
+
+
+      git fetch origin %APPVEYOR_REPO_BRANCH%:origin --no-tags
+      git fetch remote %REMOTE_TARGET%:remote --no-tags
+
+
+
+
+  - cmd: |
+      git checkout origin/%APPVEYOR_REPO_BRANCH%
+
+      git reset --hard HEAD~2
+      git push -f origin HEAD:%APPVEYOR_REPO_BRANCH%
+
+
+
+
+  - cmd: |
+      git config --global --unset credential.helper
+      git config --global --unset user.name
+      git config --global --unset user.email
+
+      powershell Remove-Item "$HOME\.git-credentials"
+
+
+
+
+  #############################################################
+
+
+
+
+  - cmd: |
+      git init
+
+      git config --global credential.helper store
+      powershell Add-Content "$HOME\.git-credentials" "https://%REMOTE_AUTHOR%:%REMOTE_LOGIN%@github.com`n"
+
+      git config --global user.name "%REMOTE_AUTHOR%"
+      git config --global user.email "%REMOTE_EMAIL%"
+
+      git config --global advice.detachedHead false
+
+
+
+
+  - cmd: |
+      git checkout origin/%APPVEYOR_REPO_BRANCH%
+
+      git push -f remote HEAD:%REMOTE_TARGET%
+      git log -1
+
+
+
+      appveyor exit
