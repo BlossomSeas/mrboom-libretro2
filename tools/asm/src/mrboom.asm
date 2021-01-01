@@ -7094,6 +7094,7 @@ rtytyrrtytyrtyuutyiyuuiouiopuiouiopioppiopiopp2:
 
 ;truc_monstre db 32*13 dup (?)
 
+call belt_bombs
 call deplacement_bombes
 
 
@@ -10889,6 +10890,55 @@ jne rtmklmrtyjklrtymjkrtyjklmrtyrty
 POPALL
 ret
 endp
+
+
+belt_bombs proc near
+PUSHALL
+
+test dword ptr [changement],0001b
+jne belt_bombs_exit
+
+mov ebx,[liste_bombe+ebp+4+2*4] ;offset dans truc
+
+mov dl,[truc+ebx]
+mov dl,100
+cmp dl,100
+je belt_bombs_move_left
+cmp dl,101
+je belt_bombs_move_right
+cmp dl,102
+je belt_bombs_move_up
+cmp dl,103
+je belt_bombs_move_down
+jmp belt_bombs_exit
+
+
+belt_bombs_move_left:
+mov word ptr [liste_bombe+ebp+4+4*4],-1
+mov word ptr [liste_bombe+ebp+4+4*4+2],0
+jmp belt_bombs_exit
+
+belt_bombs_move_right:
+mov word ptr [liste_bombe+ebp+4+4*4],1
+mov word ptr [liste_bombe+ebp+4+4*4+2],0
+jmp belt_bombs_exit
+
+belt_bombs_move_up:
+mov word ptr [liste_bombe+ebp+4+4*4],0
+mov word ptr [liste_bombe+ebp+4+4*4+2],-1
+jmp belt_bombs_exit
+
+belt_bombs_move_down:
+mov word ptr [liste_bombe+ebp+4+4*4],0
+mov word ptr [liste_bombe+ebp+4+4*4+2],1
+jmp belt_bombs_exit
+
+
+belt_bombs_exit:
+POPALL
+ret
+endp
+
 
 deplacement_bombes proc near
 
