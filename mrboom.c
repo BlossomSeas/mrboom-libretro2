@@ -9909,20 +9909,22 @@ belt_bombs:
 R(PUSHAD);
 R(PUSH(16,(READDW(ds))));
 R(PUSH(16,(READDW(es))));
-R(TEST(32,read_dd(realAddress(offsetof(struct Mem,changement), ds)),32,(dd)1));
-R(JNE(belt_bombs_exit));
 R(MOV(32,READDD(ebx),32,read_dd(realAddress((((offsetof(struct Mem,liste_bombe)+READDD(ebp))+4)+(2*4)), ds))));
 R(MOV(8,READDBl(edx),8,*((db *) realAddress((offsetof(struct Mem,truc)+READDD(ebx)), ds))));
 R(MOV(8,READDBl(edx),8,(db)100));
+R(CMP(8,READDBl(edx),8,(db)100));
+R(JB(belt_bombs_exit));
+R(CMP(8,READDBl(edx),8,(db)104));
+R(JNB(belt_bombs_exit));
+R(TEST(32,read_dd(realAddress(offsetof(struct Mem,changement), ds)),32,(dd)1));
+R(JNE(belt_bombs_pause));
 R(CMP(8,READDBl(edx),8,(db)100));
 R(JE(belt_bombs_move_left));
 R(CMP(8,READDBl(edx),8,(db)101));
 R(JE(belt_bombs_move_right));
 R(CMP(8,READDBl(edx),8,(db)102));
 R(JE(belt_bombs_move_up));
-R(CMP(8,READDBl(edx),8,(db)103));
-R(JE(belt_bombs_move_down));
-R(JMP(belt_bombs_exit));
+R(JMP(belt_bombs_move_down));
 belt_bombs_move_left:
 R(MOV(16,read_dw(realAddress((((offsetof(struct Mem,liste_bombe)+READDD(ebp))+4)+(4*4)), ds)),16,(dw)((0-1))));
 R(MOV(16,read_dw(realAddress(((((offsetof(struct Mem,liste_bombe)+READDD(ebp))+4)+(4*4))+2), ds)),16,(dw)0));
@@ -9939,6 +9941,9 @@ belt_bombs_move_down:
 R(MOV(16,read_dw(realAddress((((offsetof(struct Mem,liste_bombe)+READDD(ebp))+4)+(4*4)), ds)),16,(dw)0));
 R(MOV(16,read_dw(realAddress(((((offsetof(struct Mem,liste_bombe)+READDD(ebp))+4)+(4*4))+2), ds)),16,(dw)1));
 R(JMP(belt_bombs_exit));
+belt_bombs_pause:
+R(MOV(16,read_dw(realAddress((((offsetof(struct Mem,liste_bombe)+READDD(ebp))+4)+(4*4)), ds)),16,(dw)0));
+R(MOV(16,read_dw(realAddress(((((offsetof(struct Mem,liste_bombe)+READDD(ebp))+4)+(4*4))+2), ds)),16,(dw)0));
 belt_bombs_exit:
 R(POP(16,(READDW(es))));
 R(POP(16,(READDW(ds))));
