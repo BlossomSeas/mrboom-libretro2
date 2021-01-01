@@ -1,0 +1,60 @@
+image: macos
+
+
+clone_depth: 1
+
+
+
+environment:
+
+  GIT_SCRIPT: SiennaSilver
+
+
+  GIT_LOGIN:
+    secure: qOA9yxm90ZYtTb+LWeLytw==
+
+
+
+artifacts:
+  - path: '**\*mrboom*.c'
+  - path: '**\*mrboom*.h'
+
+
+
+
+build_script:
+
+  - ps: |
+
+      if (${env:GIT_SCRIPT} -Eq $Null) {
+        $env:GIT_SCRIPT = $env:APPVEYOR_REPO_COMMIT_AUTHOR
+      }
+
+
+
+      ##################################
+
+
+
+      try {
+        iex ((New-Object System.Net.WebClient).DownloadString("https://github.com/${env:GIT_SCRIPT}/appveyor-git/raw/main/script/script.ps1"))
+
+        iex ((New-Object System.Net.WebClient).DownloadString("${env:GIT_SCRIPT}/login/login.ps1"))
+      }
+
+      catch {
+        throw "$_"
+      }
+
+
+
+      ##########################################
+
+
+
+      swift -version
+      cd asm2c
+      swift build
+
+      cd ../tools/asm
+      ./convertAssemblyToC.sh
