@@ -1,11 +1,11 @@
 #!/bin/bash
 
-asm2c=~/projects/mrboom-libretro/asm2c
+asm2c=~/projects/mrboom-libretro1/asm2c
 asm2cBIN=${asm2c}/.build/debug/asm2c
 resourcePath=${asm2c}/Resources
 exitOnError=1
 swiftBin=/usr/bin/swift
-mrboomPath=~/projects/mrboom-libretro
+mrboomPath=~/projects/mrboom-libretro1
 
 printError() {
     echo -e "\033[1;31m$1\033[0m"
