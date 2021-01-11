@@ -8,6 +8,11 @@ environment:
   SCRIPT: .
 
 
+artifacts:
+  - path: '**\*_ngc.a'
+  - path: '**\*_ngc.dol'
+
+
 
 build_script:
 
