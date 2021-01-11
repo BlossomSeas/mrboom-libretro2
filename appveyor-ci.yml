@@ -15,6 +15,11 @@ build_script:
       $env:DIR = ${env:APPVEYOR_BUILD_FOLDER}
 
 
+  - sh: |
+      cd $DIR
+      git submodule update --init --recursive
+      git clone https://github.com/libretro/RetroArch Retroarch --depth 1
+
 
   - sh: |
       sudo apt-get remove -y --purge man-db
@@ -38,10 +43,6 @@ build_script:
       # - wiiu-dev
       # - switch-dev
       # tar -zcvf $DIR/archive.tar.gz .
-
-      cd $DIR
-      git clone https://github.com/libretro/RetroArch Retroarch --depth 1
-
 
 
   - sh: |
