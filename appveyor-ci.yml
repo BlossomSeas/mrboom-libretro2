@@ -1,0 +1,55 @@
+image: ubuntu
+
+
+clone_depth: 50
+
+
+environment:
+  SCRIPT: .
+
+
+
+build_script:
+
+  - ps: |
+      $env:DIR = ${env:APPVEYOR_BUILD_FOLDER}
+
+
+
+  - sh: |
+      sudo apt-get remove -y --purge man-db
+
+      wget "https://github.com/devkitPro/pacman/releases/download/v1.0.2/devkitpro-pacman.amd64.deb?raw=true" -O devkitpro-pacman.amd64.deb
+      sudo apt-get install gdebi-core
+      sudo gdebi devkitpro-pacman.amd64.deb <<< "y"
+      sudo dkp-pacman -S "gamecube-dev" --noconfirm
+      source /etc/profile.d/devkit-env.sh
+
+      export DEVKITPRO="/opt/devkitpro"
+      export DEVKITPPC="/opt/devkitpro/devkitPPC"
+      export PATH="$DEVKITPPC/bin:$PATH"
+
+      # - gp32-dev
+      # - gba-dev 
+      # - nds-dev
+      # - 3ds-dev
+      # - gamecube-dev
+      # - wii-dev
+      # - wiiu-dev
+      # - switch-dev
+      # tar -zcvf $DIR/archive.tar.gz .
+
+      # cd $DIR
+      # git clone https://github.com/libretro/RetroArch Retroarch --depth 1
+
+
+
+  - sh: |
+      cd $DIR/$SCRIPT
+
+      make platform=ngc -f Makefile -j$(getconf _NPROCESSORS_ONLN) 
+      mv $DIR/$SCRIPT/*.a $DIR/Retroarch/libretro_ngc.a
+
+      cd $DIR/Retroarch
+      make -f Makefile.ngc EXTERNAL_LIBOGC=1 GX_PTHREAD_LEGACY=0 -j$(getconf _NPROCESSORS_ONLN) 
+      # make -f Makefile.wii EXTERNAL_LIBOGC=1 GX_PTHREAD_LEGACY=0 LIBRETRO=nxengine
