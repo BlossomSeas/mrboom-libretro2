@@ -5,7 +5,7 @@ clone_depth: 50
 
 
 environment:
-  SCRIPT: .
+  SCRIPT: libretro
 
 
 
