@@ -215,7 +215,7 @@ else ifneq (,$(filter $(platform), ngc wii wiiu))
 
    # Nintendo Game Cube
    else ifneq (,$(findstring ngc,$(platform)))
-      CFLAGS += -DGEKKO -mrvl
+      CFLAGS += -DGEKKO -mogc
    endif
 
 # GCW0
