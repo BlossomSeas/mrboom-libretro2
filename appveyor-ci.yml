@@ -5,7 +5,7 @@ clone_depth: 50
 
 
 environment:
-  SCRIPT: libretro
+  SCRIPT: .
 
 
 
@@ -39,8 +39,8 @@ build_script:
       # - switch-dev
       # tar -zcvf $DIR/archive.tar.gz .
 
-      # cd $DIR
-      # git clone https://github.com/libretro/RetroArch Retroarch --depth 1
+      cd $DIR
+      git clone https://github.com/libretro/RetroArch Retroarch --depth 1
 
 
 
